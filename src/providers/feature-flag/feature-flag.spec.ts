@@ -1,18 +1,42 @@
+import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { FeatureFlagService } from './feature-flag';
+import { FeatureFlagClient } from '@ssense/feature-flag';
+import { AppLogger } from '@ssense/logger';
+import { FeatureFlagProvider } from './feature-flag';
+import { FeatureFlagType } from './feature-flag.type';
 
-describe('FeatureFlagService', () => {
-  let provider: FeatureFlagService;
+describe('FeatureFlagProvider', () => {
+  let featureFlagClient: FeatureFlagClient<FeatureFlagType>;
+  let mockConfigService: ConfigService;
+  let mockAppLogger: AppLogger;
 
   beforeEach(async () => {
+    mockConfigService = {
+      get: jest.fn().mockImplementation((key: string) => {
+        const config: { [key: string]: string | FeatureFlagType } = {
+          env: 'development',
+          launchDarklySDKKey: 'test-key',
+          featureFlags: {} as FeatureFlagType,
+        };
+        return config[key];
+      }),
+    } as unknown as ConfigService;
+
+    mockAppLogger = {} as AppLogger;
+
     const module: TestingModule = await Test.createTestingModule({
-      providers: [FeatureFlagService],
+      providers: [
+        FeatureFlagProvider,
+        { provide: ConfigService, useValue: mockConfigService },
+        { provide: AppLogger, useValue: mockAppLogger },
+      ],
     }).compile();
 
-    provider = module.get<FeatureFlagService>(FeatureFlagService);
+    featureFlagClient =
+      module.get<FeatureFlagClient<FeatureFlagType>>(FeatureFlagClient);
   });
 
   it('should be defined', () => {
-    expect(provider).toBeDefined();
+    expect(featureFlagClient).toBeDefined();
   });
 });
