@@ -1,0 +1,115 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.name }}
+    env: {{ .Values.data.ENV }}
+    team: {{ .Values.team }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}s
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    tags.datadoghq.com/env: {{ .Values.data.ENV }}
+    tags.datadoghq.com/service: {{ .Values.name }}
+    {{- with .Values.labels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.deploymentStrategy.maxSurge }}
+      maxUnavailable: {{ .Values.deploymentStrategy.maxUnavailable }}
+    type: {{ .Values.deploymentStrategy.type }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+        release: {{ .Release.Name }}
+        tags.datadoghq.com/env: {{ .Values.data.ENV }}
+        tags.datadoghq.com/service: {{ .Values.name }}
+        {{- with .Values.labels }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    spec:
+    # isssu with "listen EACCES: permission denied 0.0.0.0:80"
+      securityContext:
+        sysctls:
+        - name: net.ipv4.ip_unprivileged_port_start
+          value: "80"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - {{ .Values.name }}
+            topologyKey: kubernetes.io/zone
+      containers:
+      - name: "{{ .Values.name }}"
+        image: "{{ .Values.image.repository }}:{{ .Values.image.version }}"
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: DD_TRACE_AGENT_HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        {{- range $secret := .Values.secrets }}
+        {{- range $index := until ( len $secret.KUBE_SECRET_PROPERTY | int) }}
+        - name: {{ index $secret.KUBE_SECRET_PROPERTY $index }} # env variable that will appear in the pod
+          valueFrom:
+            secretKeyRef:
+              name: {{ $secret.KUBE_SECRET_NAME }}
+              key: {{ index $secret.AWS_SECRET_PROPERTY $index }}
+        {{- end }}
+        {{- end }}
+        envFrom:
+        - configMapRef:
+            name: {{ .Values.name }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.probe.readinessProbe.httpGet.path }}
+            port: {{ .Values.probe.readinessProbe.httpGet.port }}
+          initialDelaySeconds: {{ .Values.probe.readinessProbe.initialDelaySeconds }}
+          timeoutSeconds: {{ .Values.probe.readinessProbe.timeoutSeconds }}
+          periodSeconds: {{ .Values.probe.readinessProbe.periodSeconds }}
+          successThreshold: {{ .Values.probe.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.probe.readinessProbe.failureThreshold }}
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.probe.livenessProbe.httpGet.path }}
+            port: {{ .Values.probe.livenessProbe.httpGet.port }}
+          initialDelaySeconds: {{ .Values.probe.livenessProbe.initialDelaySeconds }}
+          timeoutSeconds: {{ .Values.probe.livenessProbe.timeoutSeconds }}
+          periodSeconds: {{ .Values.probe.livenessProbe.periodSeconds }}
+          successThreshold: {{ .Values.probe.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.probe.livenessProbe.failureThreshold }}
+        resources:
+          limits:
+            cpu: {{ .Values.resources.limits.cpu }}
+            memory: {{ .Values.resources.limits.memory }}
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
+      dnsPolicy: {{ .Values.dnsPolicy }}
+      imagePullSecrets:
+      - name: dockerkey
+      dnsConfig:
+        options:
+        - name: use-vc
+        - name: single-request-reopen
+      restartPolicy: {{ .Values.restartPolicy }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | int }}

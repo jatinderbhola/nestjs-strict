@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+    name: ms-shippingxp-api
+    description: Open API for ms-shippingxp
+spec:
+    type: openapi
+    owner: argonauts
+    lifecycle: production
+    definition:
+        $text: https://github.com/Groupe-Atallah/dm-shipping/blob/main/services/eks/docs/openAPI/api.yaml
+---
+

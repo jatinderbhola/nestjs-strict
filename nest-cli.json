@@ -6,5 +6,11 @@
     "deleteOutDir": true,
     "builder": "swc",
     "typeCheck": true
-  }
+  },
+  "assets": [
+    {
+      "include": "config/**",
+      "outDir": "./dist"
+    }
+  ]
 }

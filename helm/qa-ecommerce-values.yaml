@@ -1,0 +1,134 @@
+##################################
+#   Owners                       #
+##################################
+team: 'argonauts'
+
+##################################
+#     Deployment Team labels     #
+##################################
+# Annotations and labels must be 63 characters or less,
+# beginning and ending with an alphanumeric character ([a-z0-9A-Z]) with dashes (-), underscores (_), dots (.),
+# and alphanumerics between.
+# https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/#syntax-and-character-set
+labels:
+    application: ms-shippingxp
+    environment-type: qa
+    team: argonauts
+    domain: online
+    product: shipping
+    sensitive-data: 'false'
+    owneremail: argonauts.team-ssense.com
+
+##################################
+#     Deployments, Service       #
+##################################
+# name of the project used across the different helm files to identify this service
+name: ms-shippingxp
+# Number of pod to start
+replicaCount: 1
+# Command to execute when the pod starts
+initialCommand: '["make", "start-api"]'
+# Configuration on how you expose your service in the K8S ecosystem
+service:
+    # Port on which your service is listening
+    port: 80
+    # Type of service
+    type: ClusterIP
+    # Network protocol
+    protocol: TCP
+    # Optional field
+    # By default and for convenience, the Kubernetes control plane
+    # will allocate a port from a range (default: 30000-32767)
+    targetPort: 80
+
+# Docker image information
+image:
+    # Image to run stored on Dockerhub
+    repository: '142387216362.dkr.ecr.us-west-2.amazonaws.com/ms-shippingxp'
+    # Which version of this image to run
+    version: '1.0.0'
+    # The default pull policy is IfNotPresent which causes the kubelet to skip pulling an image if it already exists
+    pullPolicy: IfNotPresent
+probe:
+    readinessProbe:
+        httpGet:
+            path: /readiness
+            port: 80
+        initialDelaySeconds: 10
+        timeoutSeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        failureThreshold: 3
+    livenessProbe:
+        httpGet:
+            path: /liveness
+            port: 80
+        initialDelaySeconds: 10
+        timeoutSeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        failureThreshold: 3
+resources:
+    # Resources (CPU + Memory)
+    limits:
+        # Maximum CPU a pod can be assigned
+        cpu: '500m'
+        # Maximum Memory a pod can by assigned
+        memory: '250Mi'
+    requests:
+        # Amount of CPU assigned to a pod on startup
+        cpu: '200m'
+        # Amount of Memory assigned to a pod on startup
+        memory: '200Mi'
+
+        # Deployment configuration
+deploymentStrategy:
+    # maximum number of Pods that can be unavailable during the update process.
+    maxUnavailable: 10%
+    # Maximum number of Pods that can be created over the desired number of Pods.
+    maxSurge: 25%
+    # Deployment stategy
+    type: RollingUpdate
+
+# DNS policy
+dnsPolicy: ClusterFirst
+
+# Container restart policy
+restartPolicy: Always
+# Time given to pods to finish their request before the pod is killed
+terminationGracePeriodSeconds: 30
+
+# DataDog Configuration
+ddProfilingEnabled: true
+ddProfilingExperimentalCPUEnabled: true
+ddProfilingTimelineEnabled: true
+ddTraceEnabled: true
+ddRuntimeMetricsEnabled: true
+ddTags: 'env:qa,service:ms-shippingxp'
+
+# LaunchDarkly Configuration
+launchDarklyRedisHost: 'wk-launchdarklyrelayproxy-qa.ssense.com'
+launchDarklyRedisPort: 6379
+
+##################################
+#         CONFIG MAPS            #
+##################################
+data:
+    ENV: 'qa'
+    appID: ms-shippingxp
+    appName: ms-shippingxp
+    appVersion: '1.0.0'
+    appPort: 80
+    apiVersion: '2020-06-26'
+    nodeEnv: qa
+    logLevel: '2'
+    shutdownWaitTimeout: '5000'
+
+##################################
+# Secret Variables               #
+##################################
+secrets:
+    - launchdarkly:
+      KUBE_SECRET_NAME: 'shared-launchdarkly-launchdarkly'
+      AWS_SECRET_PROPERTY: ['LAUNCHDARKLY_SDK_KEY']
+      KUBE_SECRET_PROPERTY: ['LAUNCH_DARKLY_SDK_KEY']

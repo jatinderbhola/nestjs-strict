@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app: {{ .Values.name }}
+data:
+  APIVERSION: "{{ .Values.data.apiVersion}}"
+  APP_ID: "{{ .Values.data.appID }}"
+  APP_NAME: "{{ .Values.data.appName }}"
+  APP_VERSION: "{{ .Values.data.appVersion }}"
+  APP_PORT: "{{ .Values.data.appPort }}"
+  LOG_LEVEL: "{{ .Values.data.logLevel }}"
+  NODE_ENV: "{{ .Values.data.nodeEnv }}"
+  SHUTDOWN_WAIT_TIMEOUT: "{{ .Values.data.shutdownWaitTimeout }}"
+  DD_PROFILING_ENABLED: "{{ .Values.ddProfilingEnabled }}"
+  # Might need to be removed once out of beta - start
+  DD_PROFILING_EXPERIMENTAL_CPU_ENABLED: "{{ .Values.ddProfilingExperimentalCPUEnabled }}"
+  DD_PROFILING_TIMELINE_ENABLED: "{{ .Values.ddProfilingTimelineEnabled }}"
+  # Might need to be removed once out of beta - end
+  DD_SERVICE_NAME: "{{ .Values.data.appName }}"
+  DD_ENV: "{{ .Values.data.ENV }}"
+  DD_TRACE_ENABLED: "{{ .Values.ddTraceEnabled }}"
+  DD_RUNTIME_METRICS_ENABLED: "{{ .Values.ddRuntimeMetricsEnabled }}"
+  DD_TAGS: "{{ .Values.ddTags }}"
+  # LaunchDarkly setup
+  LAUNCH_DARKLY_REDIS_HOST: "{{ .Values.launchDarklyRedisHost }}"
+  LAUNCH_DARKLY_REDIS_PORT: "{{ .Values.launchDarklyRedisPort }}"
