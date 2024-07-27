@@ -14,39 +14,6 @@ servers:
     description: QA server
   - url: https://internal-edge.ssense.com/ms-shippingxp
     description: Production server
-paths:
-  /healthcheck:
-    get:
-      tags:
-        - Health check
-      summary: Check if the service is healthy
-      description: Returns a 200 OK response if the service is healthy and available
-      responses:
-        '200':
-          description: The service is healthy and available
-        '500':
-          description: The service is not healthy or unavailable
-  /liveness:
-    get:
-      tags:
-        - liveness check
-      summary: Check if the service is live
-      description: Returns a 200 OK response if the service is live and available
-      responses:
-        '200':
-          description: The service is live and available
-        '500':
-          description: The service is not live or unavailable
-  /readiness:
-    get:
-      tags:
-        - readiness check
-      summary: Check if the service is ready
-      description: Returns a 200 OK response if the service is ready and available
-      responses:
-        '200':
-          description: The service is ready and available
-        '500':
-          description: The service is not ready or unavailable
+paths: {}
 components: {}
 tags: []

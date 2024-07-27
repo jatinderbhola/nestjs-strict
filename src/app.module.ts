@@ -3,8 +3,9 @@ import { ConfigModule } from '@nestjs/config';
 import { TerminusModule } from '@nestjs/terminus';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import configuration from './config/configuration';
+import configuration from './config/default';
 import { HealthModule } from './modules/health/health.module';
+import { DocumentBuilderService } from './services/document-builder/document-builder.service';
 
 @Module({
   imports: [
@@ -17,6 +18,6 @@ import { HealthModule } from './modules/health/health.module';
     HealthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, DocumentBuilderService],
 })
 export class AppModule {}

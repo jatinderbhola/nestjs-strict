@@ -1,4 +1,7 @@
 import { env } from '@ssense/env';
+import devConfig from './configuration.development';
+import prodConfig from './configuration.production';
+import testConfig from './configuration.test';
 
 const appName = env('APP_NAME', 'ms-shippingxp');
 const nodeEnv = env('NODE_ENV', 'development');
@@ -35,4 +38,10 @@ export default () => ({
   //     host: env('LAUNCH_DARKLY_REDIS_HOST', 'localhost'),
   //     port: env('LAUNCH_DARKLY_REDIS_PORT', 6379),
   // },
+
+  ...(
+    process.env.NODE_ENV === 'production' ? prodConfig() :
+      process.env.NODE_ENV === 'development' ? devConfig() :
+        process.env.NODE_ENV === 'test' ? testConfig() : {}
+  )
 });
