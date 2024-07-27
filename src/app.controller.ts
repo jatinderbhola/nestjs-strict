@@ -8,7 +8,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getAppInfo(): string {
-    return this.appService.getAppInfo();
+  async getAppInfo(): Promise<string> {
+    return await this.appService.getAppInfo();
   }
 }

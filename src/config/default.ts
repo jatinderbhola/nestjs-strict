@@ -32,7 +32,7 @@ export default () => ({
   featureFlags: {
     isDmShippingDebugModeEnabled: false,
   },
-  launchDarklySDKKey: env('LAUNCH_DARKLY_SDK_KEY', ''),
+  launchDarklySDKKey: env('LAUNCH_DARKLY_SDK_KEY', 'sdk-5ea2afbb-531e-499e-87c3-aa3076d4a462'),
   // TODO: Uncomment the below code once the redis is setup
   // launchDarklyRedis: {
   //     host: env('LAUNCH_DARKLY_REDIS_HOST', 'localhost'),

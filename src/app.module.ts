@@ -17,7 +17,6 @@ import { DocumentBuilderService } from './services/document-builder/document-bui
       load: [configuration],
     }),
     TerminusModule,
-
     HealthModule,
   ],
   controllers: [AppController],
@@ -28,5 +27,10 @@ import { DocumentBuilderService } from './services/document-builder/document-bui
     AppLoggerProvider,
     AccessLoggerProvider,
   ],
+  // exports: [
+  //   AppService,
+  //   AppLoggerProvider,
+  //   FeatureFlagProvider,
+  // ],
 })
 export class AppModule {}
