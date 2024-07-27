@@ -5,8 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import configuration from './config/default';
 import { HealthModule } from './modules/health/health.module';
-import { FeatureFlag } from './providers/feature-flag/feature-flag';
-import { DocumentBuilder } from './services/document-builder/document-builder.service';
+import { FeatureFlagService } from './providers/feature-flag/feature-flag';
+import { DocumentBuilderService } from './services/document-builder/document-builder';
 
 @Module({
   imports: [
@@ -19,6 +19,6 @@ import { DocumentBuilder } from './services/document-builder/document-builder.se
     HealthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, DocumentBuilder],
+  providers: [AppService, DocumentBuilderService, FeatureFlagService],
 })
 export class AppModule {}

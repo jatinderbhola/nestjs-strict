@@ -7,7 +7,7 @@ import swaggerJSDoc, { Options } from 'swagger-jsdoc';
 import { DocumentationOptions } from './document-builder.type';
 
 @Injectable()
-export class DocumentBuilder {
+export class DocumentBuilderService {
   private readonly env: string | undefined =
     this.configService.get<string>('env');
   private readonly documentationOptions: DocumentationOptions | undefined =
