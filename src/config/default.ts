@@ -39,9 +39,11 @@ export default () => ({
   //     port: env('LAUNCH_DARKLY_REDIS_PORT', 6379),
   // },
 
-  ...(
-    process.env.NODE_ENV === 'production' ? prodConfig() :
-      process.env.NODE_ENV === 'development' ? devConfig() :
-        process.env.NODE_ENV === 'test' ? testConfig() : {}
-  )
+  ...(process.env.NODE_ENV === 'production'
+    ? prodConfig()
+    : process.env.NODE_ENV === 'development'
+      ? devConfig()
+      : process.env.NODE_ENV === 'test'
+        ? testConfig()
+        : {}),
 });

@@ -7,13 +7,13 @@ import swaggerJSDoc, { Options } from 'swagger-jsdoc';
 import { DocumentationOptions } from './document-builder.type';
 
 @Injectable()
-export class DocumentBuilderService {
-  private readonly env: string | undefined= this.configService.get<string>('env');
-  private readonly documentationOptions: DocumentationOptions | undefined = this.configService.get<DocumentationOptions>('documentation');
+export class DocumentBuilder {
+  private readonly env: string | undefined =
+    this.configService.get<string>('env');
+  private readonly documentationOptions: DocumentationOptions | undefined =
+    this.configService.get<DocumentationOptions>('documentation');
 
-  constructor(
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly configService: ConfigService) {}
 
   async onModuleInit() {
     if (this.env === 'development') {
@@ -22,13 +22,15 @@ export class DocumentBuilderService {
   }
 
   async generateSwaggerDocument() {
-		if (this.documentationOptions?.enabled) {
-			const options: Options = {
-				definition : this.documentationOptions?.definition,
-				apis: [`${__dirname}/../controllers/*.ts`],
-			};
-      writeFileSync(join(__dirname, '../../../', this.documentationOptions.openApiDocsPath), dump(swaggerJSDoc(options)));
-		}
+    if (this.documentationOptions?.enabled) {
+      const options: Options = {
+        definition: this.documentationOptions?.definition,
+        apis: [`${__dirname}/../controllers/*.ts`],
+      };
+      writeFileSync(
+        join(__dirname, '../../../', this.documentationOptions.openApiDocsPath),
+        dump(swaggerJSDoc(options)),
+      );
+    }
   }
-
 }

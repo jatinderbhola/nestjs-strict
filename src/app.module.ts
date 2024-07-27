@@ -5,7 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import configuration from './config/default';
 import { HealthModule } from './modules/health/health.module';
-import { DocumentBuilderService } from './services/document-builder/document-builder.service';
+import { FeatureFlag } from './providers/feature-flag/feature-flag';
+import { DocumentBuilder } from './services/document-builder/document-builder.service';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { DocumentBuilderService } from './services/document-builder/document-bui
     HealthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, DocumentBuilderService],
+  providers: [AppService, DocumentBuilder],
 })
 export class AppModule {}
