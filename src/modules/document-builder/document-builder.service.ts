@@ -8,27 +8,27 @@ import { DocumentationOptions } from './document-builder.type';
 
 @Injectable()
 export class DocumentBuilderService {
-  private readonly env: string | undefined =
-    this.configService.get<string>('env');
-  private readonly documentationOptions: DocumentationOptions | undefined =
-    this.configService.get<DocumentationOptions>('documentation');
-
   constructor(private readonly configService: ConfigService) {}
 
   async onModuleInit() {
-    if (this.env === 'development') {
-      await this.generateSwaggerDocument();
-    }
+    await this.generateSwaggerDocument();
   }
 
   async generateSwaggerDocument() {
-    if (this.documentationOptions?.enabled) {
+    const env = this.configService.get<string>('env');
+    const documentationOptions =
+      this.configService.get<DocumentationOptions>('documentation');
+    if (env !== 'development' || !documentationOptions?.enabled) {
+      return;
+    }
+
+    if (documentationOptions?.enabled) {
       const options: Options = {
-        definition: this.documentationOptions?.definition,
+        definition: documentationOptions?.definition,
         apis: [`${__dirname}/../controllers/*.ts`],
       };
       writeFileSync(
-        join(__dirname, '../../../', this.documentationOptions.openApiDocsPath),
+        join(__dirname, '../../../', documentationOptions.openApiDocsPath),
         dump(swaggerJSDoc(options)),
       );
     }

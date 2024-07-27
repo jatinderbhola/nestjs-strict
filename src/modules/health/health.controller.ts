@@ -1,11 +1,9 @@
-import { HttpService } from '@nestjs/axios';
 import { Controller, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
   DiskHealthIndicator,
   HealthCheck,
   HealthCheckService,
-  HttpHealthIndicator,
   MemoryHealthIndicator,
 } from '@nestjs/terminus';
 
@@ -14,8 +12,6 @@ import {
 export class HealthController {
   constructor(
     private health: HealthCheckService,
-    private http: HttpHealthIndicator,
-    private httpService: HttpService,
     private readonly disk: DiskHealthIndicator,
     private readonly memory: MemoryHealthIndicator,
   ) {}
