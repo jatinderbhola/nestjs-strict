@@ -1,37 +1,37 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-    name: ms-shippingxp
-    description: Shipping microservice
-    annotations:
-        github.com/project-slug: Groupe-Atallah/dm-shipping
-        jenkins.io/job-full-name: Groupe-Atallah/dm-shipping
-        ssense.com/monitoring-filepath: .monitoring
-        datadoghq.com/site: datadoghq.com
-        datadoghq.com/dashboard-url: https://app.datadoghq.com/dashboard/w3e-c2v-d9q/shipping-services
-        ssense.com/datadog-service: ms-shippingxp
-        sonarqube.org/project-key: ms-shippingxp
-    tags:
-        - microservice
-        - typescript
-    links:
-        - url: https://app.datadoghq.com/dashboard/w3e-c2v-d9q/shipping-services
-          title: Datadog
-          icon: dashboard
-    slackChannels:
-        - name: argonauts
-          url: https://ssense.slack.com/archives/C01N4PP65EG
-          description: Argonauts(shipping) channel for PR reviews, question and concerns
-        - name: argonauts-ci-cd
-          url: https://ssense.slack.com/archives/C04PQPKQRA9
-          description: CI/CD channel for argonauts(shipping)
-        - name: argonauts-alerts
-          url: https://ssense.slack.com/archives/C01V0FXG3H6
-          description: Argonauts(shipping) channel for productions alerts
+  name: ms-shippingxp
+  description: Shipping microservice
+  annotations:
+    github.com/project-slug: Groupe-Atallah/dm-shipping
+    jenkins.io/job-full-name: Groupe-Atallah/dm-shipping
+    ssense.com/monitoring-filepath: .monitoring
+    datadoghq.com/site: datadoghq.com
+    datadoghq.com/dashboard-url: https://app.datadoghq.com/dashboard/w3e-c2v-d9q/shipping-services
+    ssense.com/datadog-service: ms-shippingxp
+    sonarqube.org/project-key: ms-shippingxp
+  tags:
+    - microservice
+    - typescript
+  links:
+    - url: https://app.datadoghq.com/dashboard/w3e-c2v-d9q/shipping-services
+      title: Datadog
+      icon: dashboard
+  slackChannels:
+    - name: argonauts
+      url: https://ssense.slack.com/archives/C01N4PP65EG
+      description: Argonauts(shipping) channel for PR reviews, question and concerns
+    - name: argonauts-ci-cd
+      url: https://ssense.slack.com/archives/C04PQPKQRA9
+      description: CI/CD channel for argonauts(shipping)
+    - name: argonauts-alerts
+      url: https://ssense.slack.com/archives/C01V0FXG3H6
+      description: Argonauts(shipping) channel for productions alerts
 spec:
-    type: service
-    owner: argonauts
-    system: shipping
-    lifecycle: experimental
+  type: service
+  owner: argonauts
+  system: shipping
+  lifecycle: experimental
 providesApis:
-    - ms-shippingxp-api
+  - ms-shippingxp-api

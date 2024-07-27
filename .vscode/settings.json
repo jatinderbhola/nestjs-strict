@@ -2,5 +2,5 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": ["source.fixAll.eslint", "source.sortImports"],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "cSpell.words": ["inversify", "ssense", "Fastify"]
+  "cSpell.words": ["Fastify", "inversify", "ssense", "typecheck"]
 }
