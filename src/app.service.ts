@@ -1,23 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { FeatureFlagClient } from '@ssense/feature-flag';
-import { FeatureFlagClientType, FeatureFlagType } from './providers/feature-flag/feature-flag.type';
+import { FeatureFlagService } from './modules/feature-flag/feature-flag.service';
+import {
+  FeatureFlagClientType,
+  FeatureFlagType,
+} from './modules/feature-flag/feature-flag.type';
 
 @Injectable()
 export class AppService {
   private readonly appName: string | undefined;
   private readonly appVersion: string | undefined;
   private readonly nodeEnv: string | undefined;
-  private readonly ffClient: FeatureFlagClientType;
 
   constructor(
     private configService: ConfigService,
-    private featureFlagClient: FeatureFlagClient<FeatureFlagType>,
+    private ffClient: FeatureFlagService,
   ) {
     this.appName = this.configService.get<string>('appName');
     this.appVersion = this.configService.get<string>('version');
     this.nodeEnv = this.configService.get<string>('env');
-    this.ffClient = this.featureFlagClient;
   }
 
   async getAppInfo(): Promise<any> {
@@ -34,7 +35,9 @@ export class AppService {
     };
   }
 
-  private async getFeatureFlags(): Promise<Record<string, any>> {
+  private async getFeatureFlags(): Promise<
+    Record<string, string | boolean | number | any[] | object>
+  > {
     const flags = Object.keys(this.ffClient.flags) as (keyof FeatureFlagType)[];
     const results = await Promise.all(
       flags.map(async (flag) => ({

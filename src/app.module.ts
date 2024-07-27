@@ -4,11 +4,10 @@ import { TerminusModule } from '@nestjs/terminus';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import configuration from './config/default';
+import { DocumentationModule } from './modules/document-builder/document-builder.module';
+import { FeatureFlagModule } from './modules/feature-flag/feature-flag.module';
 import { HealthModule } from './modules/health/health.module';
-import { FeatureFlagProvider } from './providers/feature-flag/feature-flag';
-import { AccessLoggerProvider } from './providers/logger/access-logger';
-import { AppLoggerProvider } from './providers/logger/app-logger';
-import { DocumentBuilderService } from './services/document-builder/document-builder';
+import { LoggerModule } from './modules/logger/logger.module';
 
 @Module({
   imports: [
@@ -18,15 +17,12 @@ import { DocumentBuilderService } from './services/document-builder/document-bui
     }),
     TerminusModule,
     HealthModule,
+    LoggerModule,
+    DocumentationModule,
+    FeatureFlagModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    DocumentBuilderService,
-    FeatureFlagProvider,
-    AppLoggerProvider,
-    AccessLoggerProvider,
-  ],
+  providers: [AppService],
   // exports: [
   //   AppService,
   //   AppLoggerProvider,
