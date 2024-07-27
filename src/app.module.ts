@@ -2,8 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { HealthCheckModule } from './controllers/health-check/health-check.module';
+import { HealthModule } from './controllers/health/health.module';
 
+import { TerminusModule } from '@nestjs/terminus';
 import configuration from './config/configuration';
 
 @Module({
@@ -12,7 +13,9 @@ import configuration from './config/configuration';
       cache: true,
       load: [configuration],
     }),
-    HealthCheckModule,
+    TerminusModule,
+
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
