@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { TerminusModule } from '@nestjs/terminus';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { HealthModule } from './controllers/health/health.module';
-
-import { TerminusModule } from '@nestjs/terminus';
 import configuration from './config/configuration';
+import { HealthModule } from './modules/health/health.module';
 
 @Module({
   imports: [

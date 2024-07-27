@@ -1,7 +1,9 @@
 import { HttpService } from '@nestjs/axios';
 import { Controller, Get } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { DiskHealthIndicator, HealthCheck, HealthCheckService, HttpHealthIndicator, MemoryHealthIndicator } from '@nestjs/terminus';
 
+@ApiTags('health checks')
 @Controller('health')
 export class HealthController {
   constructor(

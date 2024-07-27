@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@fastify/static": "^7.0.4",
     "@nestjs/axios": "^3.0.2",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.3",
@@ -27,6 +28,7 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/platform-fastify": "^10.3.10",
+    "@nestjs/swagger": "^7.4.0",
     "@nestjs/terminus": "^10.2.3",
     "@ssense/app-metrics": "^2.1.1",
     "@ssense/env": "^1.0.3",
