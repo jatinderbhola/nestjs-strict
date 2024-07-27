@@ -5,7 +5,6 @@ import { LoggerService } from './logger.service';
 
 describe('LoggerService', () => {
   let service: LoggerService;
-  let configService: ConfigService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -13,7 +12,6 @@ describe('LoggerService', () => {
     }).compile();
 
     service = module.get<LoggerService>(LoggerService);
-    configService = module.get<ConfigService>(ConfigService);
   });
 
   it('should be defined', () => {

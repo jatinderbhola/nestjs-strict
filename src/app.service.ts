@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { FeatureFlagService } from './modules/feature-flag/feature-flag.service';
-import {
-  FeatureFlagClientType,
-  FeatureFlagType,
-} from './modules/feature-flag/feature-flag.type';
+import { FeatureFlagType } from './modules/feature-flag/feature-flag.type';
 
 @Injectable()
 export class AppService {

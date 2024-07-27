@@ -6,8 +6,6 @@ import { FeatureFlagService } from './modules/feature-flag/feature-flag.service'
 
 describe('AppService', () => {
   let service: AppService;
-  let configService: ConfigService;
-  let ffClient: FeatureFlagService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -30,8 +28,6 @@ describe('AppService', () => {
     }).compile();
 
     service = module.get<AppService>(AppService);
-    configService = module.get<ConfigService>(ConfigService);
-    ffClient = module.get<FeatureFlagService>(FeatureFlagService);
   });
 
   it('should be defined', () => {

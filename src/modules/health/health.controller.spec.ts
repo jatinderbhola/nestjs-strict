@@ -6,18 +6,29 @@ import {
 import { Test, TestingModule } from '@nestjs/testing';
 import { HealthController } from './health.controller';
 
+type HealthCheckFunction = () => Promise<any>;
+
 class MockHealthCheckService {
-  check(checks: Function[]) {
+  async check(
+    checks: HealthCheckFunction[],
+  ): Promise<{ status: string; details: { [key: string]: any } }> {
     return Promise.resolve({
       status: 'ok',
-      details: checks.reduce(
-        (acc, check) => {
-          acc[check.name as string] = check();
-          return acc;
-        },
-        {} as { [key: string]: any },
-      ),
+      details: await this.executeChecks(checks),
     });
+  }
+
+  private async executeChecks(
+    checks: HealthCheckFunction[],
+  ): Promise<{ [key: string]: any }> {
+    const results = await Promise.all(
+      checks.map(async (check) => {
+        const result = await check();
+        return { [check.name]: result };
+      }),
+    );
+
+    return results.reduce((acc, result) => ({ ...acc, ...result }), {});
   }
 }
 
@@ -35,7 +46,6 @@ export class MockMemoryHealthIndicator {
 
 describe('HealthController', () => {
   let controller: HealthController;
-  let healthCheckService: HealthCheckService;
   let diskHealthIndicator: DiskHealthIndicator;
   let memoryHealthIndicator: MemoryHealthIndicator;
 
@@ -50,7 +60,6 @@ describe('HealthController', () => {
     }).compile();
 
     controller = module.get<HealthController>(HealthController);
-    healthCheckService = module.get<HealthCheckService>(HealthCheckService);
     diskHealthIndicator = module.get<DiskHealthIndicator>(DiskHealthIndicator);
     memoryHealthIndicator = module.get<MemoryHealthIndicator>(
       MemoryHealthIndicator,
